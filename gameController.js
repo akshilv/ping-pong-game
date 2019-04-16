@@ -15,6 +15,9 @@ var xBall = canvas.width/2 - ballRadius/2;
 var yBall = canvas.height/2 - ballRadius/2;
 // Frames per second
 const fps = 30;
+// Points
+var userPoints = 0;
+var AIPoints = 0;
 
 /**
  * Main function that executes when the window gets loaded
@@ -72,10 +75,23 @@ function drawCircle (radius, color) {
 function moveBall () {
     xBall += xBallSpeed;
     yBall += yBallSpeed;
-    if (xBall >= canvas.width || xBall <= 0) {
+    if ((xBall + ballRadius/2) >= canvas.width) {
+        if (yBall > yAIPaddle && yBall < (yAIPaddle + paddleHeight)) {
+            xBallSpeed = -xBallSpeed;
+            return;
+        }
+        userPoints++;
         reset();
     }
-    if (yBall >= canvas.height || yBall <= 0) {
+    if ((xBall - ballRadius/2) <= 0) {
+        if (yBall > (yUserPaddle - paddleHeight/2) && yBall < (yUserPaddle + paddleHeight/2)) {
+            xBallSpeed = -xBallSpeed;
+            return;
+        }
+        AIPoints++;
+        reset();
+    }
+    if ((yBall + ballRadius/2) >= canvas.height || (yBall - ballRadius/2) <= 0) {
         yBallSpeed = -yBallSpeed;
     }
 }
@@ -112,13 +128,13 @@ function getMousePos (event) {
  * Move the AI paddle based on the ball's y coordinate
  */
 function moveAIPaddle () {
-    if (yAIPaddle + paddleHeight/2 < yBall) {
-        if (yAIPaddle + paddleHeight >= canvas.height) {
+    if ((yAIPaddle + paddleHeight/2) < yBall) {
+        if ((yAIPaddle + paddleHeight) >= canvas.height) {
             return;
         }
         yAIPaddle += yAIPaddleSpeed;
     }
-    if (yAIPaddle + paddleHeight/2 > yBall) {
+    if ((yAIPaddle + paddleHeight/2) > yBall) {
         if (yAIPaddle <= 0) {
             return;
         }
