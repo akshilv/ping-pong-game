@@ -19,12 +19,17 @@ const fps = 30;
  * Main function that executes when the window gets loaded
  */
 window.onload = function () {
+    canvas.addEventListener('mousemove', function (event) {
+        var mousePos = getMousePos(event);
+        // Set the user paddle based on mouse position
+        yUserPaddle = mousePos.yPaddle;
+    });
     // Draw everything based on fps
     setInterval(function () {
         // Draw the canvas
         drawRect(0, 0, canvas.width, canvas.height, 'blue');
         // Draw paddles
-        drawRect(0, yUserPaddle, paddleWidth, paddleHeight, 'white');
+        drawRect(0, yUserPaddle - paddleHeight/2, paddleWidth, paddleHeight, 'white');        // Center the paddle around the mouse pointer
         drawRect(canvas.width - paddleWidth, yAIPaddle, paddleWidth, paddleHeight, 'white');
         // Draw the ball
         drawCircle(ballRadius, 'white');
@@ -85,4 +90,17 @@ function reset () {
     // Reverse ball speed
     xBallSpeed = -xBallSpeed;
     yBallSpeed = -yBallSpeed;
+}
+
+/**
+ * Returns the mouse position on canvas
+ * @param {Event} event 
+ */
+function getMousePos (event) {
+    var rect = canvas.getBoundingClientRect();
+    var root = document.documentElement;
+    return {
+        xPaddle: event.clientX - rect.left - root.scrollLeft,
+        yPaddle: event.clientY - rect.top - root.scrollTop,
+    }
 }
