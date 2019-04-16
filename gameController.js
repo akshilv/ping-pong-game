@@ -6,6 +6,8 @@ const paddleHeight = 100;
 const paddleWidth = 10;
 var yUserPaddle = canvas.height/2 - paddleHeight/2;
 var yAIPaddle = canvas.height/2 - paddleHeight/2;
+var xBallSpeed = 5;
+var yBallSpeed = 5;
 // Ball related globals
 const ballRadius = 10;
 var xBall = canvas.width/2 - ballRadius/2;
@@ -26,6 +28,8 @@ window.onload = function () {
         drawRect(canvas.width - paddleWidth, yAIPaddle, paddleWidth, paddleHeight, 'white');
         // Draw the ball
         drawCircle(ballRadius, 'white');
+        // Move the ball
+        moveBall();
     }, 1000/fps);
 }
 
@@ -52,4 +56,33 @@ function drawCircle (radius, color) {
     canvasContext.fillStyle = color;
     canvasContext.arc(xBall, yBall, radius, 0, Math.PI * 2, true);
     canvasContext.fill();
+}
+
+/**
+ * Move the ball around the canvas
+ */
+function moveBall () {
+    xBall += xBallSpeed;
+    yBall += yBallSpeed;
+    if (xBall >= canvas.width || xBall <= 0) {
+        reset();
+    }
+    if (yBall >= canvas.height || yBall <= 0) {
+        yBallSpeed = -yBallSpeed;
+    }
+}
+
+/**
+ * Reset cooridnate of ball when a player scores
+ */
+function reset () {
+    // Reset ball's x and y coordinates
+    xBall = canvas.width/2 - ballRadius/2;
+    yBall = canvas.height/2 - ballRadius/2;
+    // Reset both paddle's position
+    yUserPaddle = canvas.height/2 - paddleHeight/2;
+    yAIPaddle = canvas.height/2 - paddleHeight/2;
+    // Reverse ball speed
+    xBallSpeed = -xBallSpeed;
+    yBallSpeed = -yBallSpeed;
 }
