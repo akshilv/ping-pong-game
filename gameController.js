@@ -8,6 +8,7 @@ var yUserPaddle = canvas.height/2 - paddleHeight/2;
 var yAIPaddle = canvas.height/2 - paddleHeight/2;
 var xBallSpeed = 5;
 var yBallSpeed = 5;
+var yAIPaddleSpeed = 6;
 // Ball related globals
 const ballRadius = 10;
 var xBall = canvas.width/2 - ballRadius/2;
@@ -35,6 +36,8 @@ window.onload = function () {
         drawCircle(ballRadius, 'white');
         // Move the ball
         moveBall();
+        // Move the AI Paddle
+        moveAIPaddle();
     }, 1000/fps);
 }
 
@@ -102,5 +105,23 @@ function getMousePos (event) {
     return {
         xPaddle: event.clientX - rect.left - root.scrollLeft,
         yPaddle: event.clientY - rect.top - root.scrollTop,
+    }
+}
+
+/**
+ * Move the AI paddle based on the ball's y coordinate
+ */
+function moveAIPaddle () {
+    if (yAIPaddle + paddleHeight/2 < yBall) {
+        if (yAIPaddle + paddleHeight >= canvas.height) {
+            return;
+        }
+        yAIPaddle += yAIPaddleSpeed;
+    }
+    if (yAIPaddle + paddleHeight/2 > yBall) {
+        if (yAIPaddle <= 0) {
+            return;
+        }
+        yAIPaddle -= yAIPaddleSpeed;
     }
 }
