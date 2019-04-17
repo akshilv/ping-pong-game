@@ -1,6 +1,6 @@
 // Canvas related globals
 const canvas = document.getElementById('gameCanvas');
-const canvasContext = canvas.getContext('2d');
+const ctx = canvas.getContext('2d');
 const canvasColor = 'blue';
 // Paddle related globals
 const paddleColor = 'white';
@@ -58,10 +58,10 @@ window.onload = function () {
         drawRect(0, 0, canvas.width, canvas.height, canvasColor);
         // Show end screen
         if (showEndScreen == true) {
-            canvasContext.font = textFont;
-            canvasContext.fillStyle = textColor;
-            canvasContext.fillText(endMessage, canvas.width/4, canvas.height/2);
-            canvasContext.fillText('Click to restart.', canvas.width/4, canvas.height/2 + 60);
+            ctx.font = textFont;
+            ctx.fillStyle = textColor;
+            ctx.fillText(endMessage, canvas.width/4, canvas.height/2);
+            ctx.fillText('Click to restart.', canvas.width/4, canvas.height/2 + 60);
             return;
         }
         // Draw paddles
@@ -70,10 +70,10 @@ window.onload = function () {
         // Draw the net
         drawDashedLine(canvas.width/2, 0, canvas.width/2, canvas.height, netPattern, netWidth, netColor);
         // Show score
-        canvasContext.font = textFont;
-        canvasContext.fillStyle = textColor;
-        canvasContext.fillText(userPoints, canvas.width/4, canvas.height/2);
-        canvasContext.fillText(AIPoints, canvas.width*3/4, canvas.height/2);
+        ctx.font = textFont;
+        ctx.fillStyle = textColor;
+        ctx.fillText(userPoints, canvas.width/4, canvas.height/2);
+        ctx.fillText(AIPoints, canvas.width*3/4, canvas.height/2);
         // Draw the ball
         drawCircle(ballRadius, ballColor);
         // Move the ball
@@ -92,8 +92,8 @@ window.onload = function () {
  * @param {String} color - Color of rectange
  */
 function drawRect (xValue, yValue, width, height, color) {
-    canvasContext.fillStyle = color;
-    canvasContext.fillRect(xValue, yValue, width, height);
+    ctx.fillStyle = color;
+    ctx.fillRect(xValue, yValue, width, height);
 }
 
 /**
@@ -107,13 +107,13 @@ function drawRect (xValue, yValue, width, height, color) {
  * @param {String} color - Color of line
  */
 function drawDashedLine(xStart, yStart, xEnd, yEnd, pattern, width, color) {
-    canvasContext.beginPath();
-    canvasContext.setLineDash(pattern);
-    canvasContext.moveTo(xStart, yStart);
-    canvasContext.lineTo(xEnd, yEnd);
-    canvasContext.strokeStyle = color;
-    canvasContext.lineWidth = width;
-    canvasContext.stroke();
+    ctx.beginPath();
+    ctx.setLineDash(pattern);
+    ctx.moveTo(xStart, yStart);
+    ctx.lineTo(xEnd, yEnd);
+    ctx.strokeStyle = color;
+    ctx.lineWidth = width;
+    ctx.stroke();
 }
 
 /**
@@ -122,10 +122,10 @@ function drawDashedLine(xStart, yStart, xEnd, yEnd, pattern, width, color) {
  * @param {String} color 
  */
 function drawCircle (radius, color) {
-    canvasContext.beginPath();
-    canvasContext.fillStyle = color;
-    canvasContext.arc(xBall, yBall, radius, 0, Math.PI * 2, true);
-    canvasContext.fill();
+    ctx.beginPath();
+    ctx.fillStyle = color;
+    ctx.arc(xBall, yBall, radius, 0, Math.PI * 2, true);
+    ctx.fill();
 }
 
 /**
