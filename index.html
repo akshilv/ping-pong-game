@@ -2,9 +2,23 @@
 <html>
     <head>
         <title>Ping Pong</title>
+        <link rel="stylesheet" href="main.css" />
     </head>
-    <body style="background-color: black">
-        <canvas id="gameCanvas" width="800" height="600" style="border: 5px solid white"></canvas>
-        <script src="./gameController.js"></script>
+    <body>
+        <div>
+            <canvas id="gameCanvas" width="800" height="600"></canvas>
+            <script src="./gameController.js"></script>
+        </div>
+        <div class="instructions">
+            <h2>INSTRUCTIONS</h2>
+            <ul>
+                <li>Hover the mouse to move the left paddle.</li>
+                <li>Position the paddle properly to hit the ball.</li>
+                <li>Increase or decrease the speed of the ball based on the part of the paddle that hits the ball.</li>
+                <li>First to reach 3 points wins!</li>
+                <li>Left click to restart the game after the game gets over.</li>
+            </ul>
+            <h3>Visit the <a href="https://github.com/akshilv/ping-pong-game" target="_blank">github repository.</a></h3>
+        </div>
     </body>
 </html>
