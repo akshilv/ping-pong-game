@@ -8,15 +8,18 @@ const paddleHeight = 100;
 const paddleWidth = 10;
 var yUserPaddle = canvas.height/2 - paddleHeight/2;
 var yAIPaddle = canvas.height/2 - paddleHeight/2;
-var yAIPaddleSpeed = 6;
-const yAIPaddleIgnorableArea = paddleHeight*0.35;
+var yAIPaddleSpeed = 7;
+const yAIPaddleIgnorableArea = paddleHeight * 0.35;
 // Ball related globals
 const ballColor = 'white';
 const ballRadius = 10;
+const ballSpeedMultiplier = 0.25;
+const xBallDefaultSpeed = 5;
+const yBallDefaultSpeed = 5;
 var xBall = canvas.width/2 - ballRadius/2;
 var yBall = canvas.height/2 - ballRadius/2;
-var xBallSpeed = 5;
-var yBallSpeed = 5;
+var xBallSpeed = xBallDefaultSpeed;
+var yBallSpeed = yBallDefaultSpeed;
 // Net related globals
 const netWidth = 5;
 const netColor = 'white';
@@ -24,7 +27,7 @@ const netPattern = [35];
 // Frames per second
 const fps = 60;
 // Points
-const winningPoints = 1;
+const winningPoints = 3;
 var userPoints = 0;
 var AIPoints = 0;
 // Text related globals
@@ -44,8 +47,10 @@ window.onload = function () {
         yUserPaddle = mousePos.yMouse;
     });
     canvas.addEventListener('click', function () {
-        showEndScreen = false;
-        reset();
+        if (showEndScreen == true) {
+            showEndScreen = false;
+            reset();
+        }
     });
     // Draw everything based on fps
     setInterval(function () {
@@ -130,17 +135,28 @@ function moveBall () {
     xBall += xBallSpeed;
     yBall += yBallSpeed;
     if ((xBall + ballRadius/2) >= canvas.width) {
+        // If the ball hits the AI paddle, reverse the ball speed and change the ball's speed
         if (yBall > (yAIPaddle - paddleWidth) && yBall < (yAIPaddle + paddleHeight + paddleWidth)) {
             xBallSpeed = -xBallSpeed;
+            if (yBallSpeed >= 0) {
+                yBallSpeed = Math.abs(yBall - (yAIPaddle + paddleHeight/2)) * ballSpeedMultiplier;
+            } else {
+                yBallSpeed = Math.abs(yBall - (yAIPaddle + paddleHeight/2)) * ballSpeedMultiplier * -1;
+            }
             return;
         }
         userPoints++;
         reset();
     }
     if ((xBall - ballRadius/2) <= 0) {
-        // If the ball hits the 
+        // If the ball hits the user paddle, reverse the ball speed and change the ball's speed
         if (yBall > (yUserPaddle - paddleHeight/2 - paddleWidth) && yBall < (yUserPaddle + paddleHeight/2 + paddleWidth)) {
             xBallSpeed = -xBallSpeed;
+            if (yBallSpeed >= 0) {
+                yBallSpeed = Math.abs(yBall - (yUserPaddle + paddleHeight/2)) * ballSpeedMultiplier;
+            } else {
+                yBallSpeed = Math.abs(yBall - (yUserPaddle + paddleHeight/2)) * ballSpeedMultiplier * -1;
+            }
             return;
         }
         AIPoints++;
@@ -178,8 +194,16 @@ function reset () {
     yUserPaddle = canvas.height/2 - paddleHeight/2;
     yAIPaddle = canvas.height/2 - paddleHeight/2;
     // Reverse ball speed
-    xBallSpeed = -xBallSpeed;
-    yBallSpeed = -yBallSpeed;
+    if (xBallSpeed > 0) {
+        xBallSpeed = -xBallDefaultSpeed;
+    } else {
+        xBallSpeed = xBallDefaultSpeed;
+    }
+    if (yBallSpeed > 0) {
+        yBallSpeed = - yBallDefaultSpeed;
+    } else {
+        yBallSpeed = yBallDefaultSpeed;
+    }
 }
 
 /**
