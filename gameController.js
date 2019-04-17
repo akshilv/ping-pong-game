@@ -22,10 +22,17 @@ const netWidth = 5;
 const netColor = 'white';
 const netPattern = [35];
 // Frames per second
-const fps = 30;
+const fps = 60;
 // Points
+const winningPoints = 1;
 var userPoints = 0;
 var AIPoints = 0;
+// Text related globals
+const textFont = '30px Arial';
+const textColor = 'white';
+// End screen related globals
+var showEndScreen = false;
+var endMessage = '';
 
 /**
  * Main function that executes when the window gets loaded
@@ -36,17 +43,30 @@ window.onload = function () {
         // Set the user paddle based on mouse position
         yUserPaddle = mousePos.yMouse;
     });
+    canvas.addEventListener('click', function () {
+        showEndScreen = false;
+        reset();
+    });
     // Draw everything based on fps
     setInterval(function () {
         // Draw the canvas
         drawRect(0, 0, canvas.width, canvas.height, canvasColor);
+        // Show end screen
+        if (showEndScreen == true) {
+            canvasContext.font = textFont;
+            canvasContext.fillStyle = textColor;
+            canvasContext.fillText(endMessage, canvas.width/4, canvas.height/2);
+            canvasContext.fillText('Click to restart.', canvas.width/4, canvas.height/2 + 60);
+            return;
+        }
         // Draw paddles
         drawRect(0, yUserPaddle - paddleHeight/2, paddleWidth, paddleHeight, paddleColor);        // Center the paddle around the mouse pointer
         drawRect(canvas.width - paddleWidth, yAIPaddle, paddleWidth, paddleHeight, paddleColor);
         // Draw the net
         drawDashedLine(canvas.width/2, 0, canvas.width/2, canvas.height, netPattern, netWidth, netColor);
         // Show score
-        canvasContext.font = '30px Arial';
+        canvasContext.font = textFont;
+        canvasContext.fillStyle = textColor;
         canvasContext.fillText(userPoints, canvas.width/4, canvas.height/2);
         canvasContext.fillText(AIPoints, canvas.width*3/4, canvas.height/2);
         // Draw the ball
@@ -135,6 +155,22 @@ function moveBall () {
  * Reset cooridnate of ball when a player scores
  */
 function reset () {
+    // Show end screen if either user or AI won
+    if (userPoints >= winningPoints) {
+        // Reset points
+        userPoints = 0;
+        AIPoints = 0;
+        showEndScreen = true;
+        endMessage = 'Congratulations! You won.';
+        return;
+    } else if (AIPoints >= winningPoints) {
+        // Reset points
+        userPoints = 0;
+        AIPoints = 0;
+        showEndScreen = true;
+        endMessage = 'Sorry! Tumse na ho payega.';
+        return;
+    }
     // Reset ball's x and y coordinates
     xBall = canvas.width/2 - ballRadius/2;
     yBall = canvas.height/2 - ballRadius/2;
